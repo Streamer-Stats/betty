@@ -26,7 +26,6 @@ class Main {
                         if (response.status === 200) {
                             let newUser = response.data
                             newUser.name = newUser.name.trim()
-                            console.log(newUser)
                             this.mongo.insertNewUser(newUser)
                             this.sendToBrainQueue(newUser)
                         } 
