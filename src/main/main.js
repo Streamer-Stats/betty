@@ -21,13 +21,19 @@ class Main {
         let username = player.username
         this.mongo.getByUserName(username)
             .then(res => {
+                
                 if(res === null) {
                     this.leagueoflegends.getPlayer(username).then(response => {
                         if (response.status === 200) {
                             let newUser = response.data
-                            newUser.name = newUser.name.trim()
+                            newUser.name = newUser.name.trimEnd()
+                            console.log(newUser.name)
                             this.mongo.insertNewUser(newUser)
-                            this.sendToBrainQueue(newUser)
+                            this.mongo.getByUserName(username).then(res => {
+                                let brainStruct  = {username: res.name, Account: { id: res.id,  accountId: res.accountId}}
+                                this.sendToBrainQueue(brainStruct)
+                            })
+  
                         } 
                     })
                     .catch(err => {
@@ -35,8 +41,10 @@ class Main {
                     })
                 }
                 else {
-                    this.sendToBrainQueue(res)
-                    console.log(`${username} already added`)
+                    let brainStruct  = {username: res.name, account: { id: res.id,  accountId: res.accountId}}
+                    this.sendToBrainQueue(brainStruct)
+                    console.log(brainStruct)
+                    console.log(`${brainStruct.username} already added`)
                 }
             })
             .catch(err => {

@@ -17,7 +17,7 @@ class MongoDB {
         })
     }
 
-    getByUserName = username => ( this.conn.collection('players').findOne({'name': username}) )
+    getByUserName = username => (  this.conn.collection('players').findOne({'name': username}) )
     
     insertNewUser = player => ( this.conn.collection('players').insertOne(player, (err, res) => {
         if (err) throw err;
